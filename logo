@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+filename = ARGV[0]
+if File.exists?(filename)
+  data = File.read(filename)
+  grid_size, program = data.split("\n\n")
+else
+  puts "error:could not read file #{filename}."
+end
+
