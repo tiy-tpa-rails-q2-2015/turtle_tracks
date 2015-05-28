@@ -4,11 +4,11 @@ class Logo
 
   def initialize(grid_size, program)
     @grid_size = grid_size
-    @program = program
+    @program = parse(program)
     @grid = []
     # setup_grid
     # print_grid
-    parse
+    run
   end
 
   def setup_grid
@@ -21,32 +21,50 @@ class Logo
     end
   end
 
-  def parse
-    commands = @program.split
+  def parse(program)
+    commands = program.split
     stack = []
-    i = 0 
+    i = 0
     while i < commands.size
-      if %w[FD RT LT BK].include?(commands[i]) 
-        stack << [commands[i], commands[i + 1]] 
+      if %w[FD RT LT BK].include?(commands[i])
+        stack << [commands[i], commands[i + 1]]
         i += 2
       elsif commands[i] == "REPEAT"
         repeat = []
+        times = commands[i + 1]
         while commands[i] != "]"
-          if %w[FD RT LT BK].include?(commands[i]) 
-            repeat << [commands[i], commands[i + 1]] 
+          if %w[FD RT LT BK].include?(commands[i])
+            repeat << [commands[i], commands[i + 1]]
+            i += 2
+          else
+            i += 1
           end
         end
-        stack << ["REPEAT", commands[i + 1], repeat] 
+        stack << ["REPEAT", times, repeat]
         i += 2
       else
         i += 1
       end
-    end 
-    puts stack.inspect
+    end
+    stack
   end
 
   def print_grid
-    puts @grid.map{|row| row.join("")}.join("\n")
+    puts @grid.map { |row| row.join("") }.join("\n")
+  end
+
+  def run
+    @program.each do |command|
+      if command[0] == "REPEAT"
+        command[1].to_i.times do
+          command[2].each do |repeat_command|
+            puts repeat_command[0] + " " + repeat_command[1]
+          end
+        end
+      else
+        puts command[0] + " " + command[1]
+      end
+    end
   end
 
 end
