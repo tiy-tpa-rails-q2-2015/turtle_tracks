@@ -1,10 +1,43 @@
 #!/usr/bin/env ruby
 
+class Logo
+
+  def initialize(grid_size, program)
+    @grid_size = grid_size
+    @program = program
+    @grid = []
+    setup_grid
+    print_grid
+  end
+
+  def setup_grid
+    @grid_size.times do |i|
+      row = []
+      @grid_size.times do |j|
+        row << "."
+      end
+      @grid << row
+    end
+  end
+
+  def program
+    #commands = @program.split(?)
+  end
+
+  def print_grid
+    puts @grid.map{|row| row.join("")}.join("\n")
+  end
+
+end
+
 filename = ARGV[0]
 if File.exists?(filename)
   data = File.read(filename)
   grid_size, program = data.split("\n\n")
+  Logo.new(grid_size.to_i, program)
 else
   puts "error:could not read file #{filename}."
 end
+
+
 
