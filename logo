@@ -6,8 +6,9 @@ class Logo
     @grid_size = grid_size
     @program = program
     @grid = []
-    setup_grid
-    print_grid
+    # setup_grid
+    # print_grid
+    parse
   end
 
   def setup_grid
@@ -20,8 +21,28 @@ class Logo
     end
   end
 
-  def program
-    #commands = @program.split(?)
+  def parse
+    commands = @program.split
+    stack = []
+    i = 0 
+    while i < commands.size
+      if %w[FD RT LT BK].include?(commands[i]) 
+        stack << [commands[i], commands[i + 1]] 
+        i += 2
+      elsif commands[i] == "REPEAT"
+        repeat = []
+        while commands[i] != "]"
+          if %w[FD RT LT BK].include?(commands[i]) 
+            repeat << [commands[i], commands[i + 1]] 
+          end
+        end
+        stack << ["REPEAT", commands[i + 1], repeat] 
+        i += 2
+      else
+        i += 1
+      end
+    end 
+    puts stack.inspect
   end
 
   def print_grid
